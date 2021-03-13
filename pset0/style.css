@@ -1,0 +1,116 @@
+    input
+    {
+    
+    text-align: center;
+    font-size: larger;
+    font-family: arial,sans-serif;
+    color: #222;
+    border: 1px solid lightslategray;
+    border-radius: 50px;
+    margin-left: 30%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: 40%;
+    }
+
+    
+
+#topbar{
+    display: block;
+    text-align: right;
+    padding: 10px;    
+    font-size: large;
+    position: relative;
+}
+
+#search{
+    text-align: right;
+}
+
+#logo{
+    text-align: center;
+    margin-left: 35%;
+    margin-right: 35%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.buttons{
+    
+    
+    font-size: 11px;
+    border-radius: 5px;
+    width: 30%;
+    margin-top: 10px;
+    margin-left: 37.5%;
+    margin-right: 35%;
+}
+.button{
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 35%;
+    background-color: #f8f9fa;
+    border: 1px solid lightslategray;
+    border-radius: 2px;
+    font-size: 14px;
+
+}
+
+#advanced_submit{
+    color: white;
+    background-color: dodgerblue;
+    width: 10%;
+    margin-left: 51%;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+#logo_advanced{
+    text-align: left;
+    max-width: 152px;
+    min-width: 152px;
+    vertical-align: top;
+    padding: 5px;
+    width: auto;
+}
+
+#pages{
+    color: darkslategray;
+    margin-left: 30px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.description{
+    margin-left: 30px;
+    display: flex;
+}
+
+.description_text{
+    width: 15%;
+    font-size: 12px;
+    color: darkslategray;
+}
+
+.advanced_form{
+    display: flex;
+    text-align: center;
+    font-size: larger;
+    font-family: arial,sans-serif;
+    color: rgb(172, 119, 119);
+    border: 1px solid lightslategray;
+    border-radius: 5px;
+    margin-left: 5%;
+    margin-right: auto;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    width: 40%;
+}
+
+#image_search{
+    text-align: center;
+    margin-left: 45%;
+    width: 10%;
+}

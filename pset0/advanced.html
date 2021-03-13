@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Advanced Search</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="topbar">
+            <div id="logo_advanced"> <image height="40px" src= "googleLogo.png" alt="Picture of the Google logo"></div>
+            <a id="search" href="index.html">Search</a>    
+        </div>
+        
+
+        <h4 id="pages">Find pages with...</h3>
+        <form id="advanced_form" action="https://google.com/search" name="f">
+            <div class="description">
+               <div class="description_text">all these words:</div><input class="advanced_form" type="text" name="as_q"></div>
+            <div class="description">
+                <div class="description_text">This exact word or phrase: </div><input class="advanced_form" type="text" name="as_epq"></div>
+            <div class="description">
+                <div class="description_text">Any of these words: </div><input class="advanced_form" type="text" name="as_oq"></div>
+            <div class="description">
+                <div class="description_text">None of these words: </div><input class="advanced_form" type="text" name="as_eq"></div>
+            <input id="advanced_submit" type="submit" value="Advanced Search">
+        </form>
+    </body>
+</html>
