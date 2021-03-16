@@ -9,8 +9,9 @@
 from helpers import *
 
 #create variables
-#list of the solution string with "l" for left or "r" for right
-letters = []
+#list of the possible solution string with "l" for left or "r" for right
+solution = []
+
 # numerical target we want to reach as solution
 target = 0
 
@@ -32,43 +33,35 @@ with open("pyramid_sample_input.txt", "r") as file:
         size += 1
 
     #amount of steps is one less than size because of starting number
-    create_solution(size - 1, letters)
+    create_solution(size - 1, solution)
 
-    #test the solution methods
-    #for x in range(31):
-        
-        #counter += 1
-        #print("counter: ", counter)
-        #change_solution(letters, counter)        
-        #print("letter string: ", letters)
+    #loop over possible solutions until the right solution has been found or we went over each solution without finding the answer
     while True:
-        #start with base number
         count = 0
-        index = 0        
+        index = 0
+        #loop over each letter in the solution   
         for x in range(size):
             if x == 0:
+                #initiate base number, as there is 1 more number than "l"/"r" we don't look at the solution here
                 count = int(pyramid[0][0])
             else:
-            #if r, the next number is one to the right, else it is the same (due to array representation of pyramid)
-                print("x is :", x)
-                print("letters[x] is ", letters[x - 1])
-                if letters[x - 1] == "r":
+            #if r, the next number is one to the right, so index changes, else it is the same (due to array representation of pyramid)
+                if solution[x - 1] == "r":
                     index += 1
+                #multiply count with the next number
                 count = count * int(pyramid[x][index]) 
-                print("pyramid[x][index]: ", int(pyramid[x][index]))
-                print("count is: ", count)
-            if x == 4:
-                print("x is 4")
 
         #check if solution is correct, or move to next
         if count == target:
-            print("target found:")
-            for letter in letters:
-                print(letter)
-                break
+            for letter in solution:
+                print(letter, end="")
+            break
         else:
             counter +=1
-            change_solution(letters, counter)
-            if counter == 32:
+            #change solution method updates to the next possible solution, see helpers.py
+            change_solution(solution, counter)
+            #amount of possible solutions is limited to 2^n where n is the size of the pyramid, so if we reach here, no solution exists.
+            if counter == 2 ** size:
+                print("no solution exists")
                 break
         

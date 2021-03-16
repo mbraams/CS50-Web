@@ -1,10 +1,7 @@
 # create the first possible solution, returns size
-def create_letters(input, letters):
-    stringlength = 0
-    for lines in input:
-        letters.append("l")
-        stringlength += 1
-    return stringlength
+def create_solution(size, array):
+    for i in range(size):
+        array.append("l")
 
 # changes the solution by flipping "r" and "l" logarithmically, so that eventually all solutions are covered.
 def change_solution(input, counter):
@@ -17,3 +14,4 @@ def change_solution(input, counter):
                    input[length - x] = "r"
             else:
                 input[length - x] = "l" 
+
