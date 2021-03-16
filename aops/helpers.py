@@ -1,4 +1,4 @@
-# create the first possible solution, returns size
+# create the first possible solution, returns size (size input is already adjusted for having 1 less letter than rows in pyramid)
 def create_solution(size, array):
     for i in range(size):
         array.append("l")

@@ -3,9 +3,8 @@
 # "l" means you go to the left, "r" to the right
 # The program loops over the possible solutions, and test wether they are true, 
 # at which point this solution is printed, and the program exits
-# it takes a file pyramid_sample_input.txt as input from the same directory
+# it takes a file pyramid_sample_input.txt as input from the same directory 
 
-#helper file with additional methods to create and update solution
 from helpers import *
 
 #create variables
@@ -19,8 +18,9 @@ counter = 0
 # Height and base width of pyramid
 size = 0
 
-# open the file (in same directory)
-with open("pyramid_sample_input.txt", "r") as file:
+# open the file (in same directory) (in case file name is not pyramid_sample_input.txt)
+csv_file = input("csv file name: ")
+with open(csv_file, "r") as file:
     # get the goal
     target = int(file.readline().split(" ")[1])  
 
