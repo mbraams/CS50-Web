@@ -5,19 +5,17 @@
 # at which point this solution is printed, and the program exits
 # it takes a file pyramid_sample_input.txt as input from the same directory
 
-
+#helper file with additional methods to create and update solution
 from helpers import *
 
 #create variables
+
 #list of the possible solution string with "l" for left or "r" for right
 solution = []
-
 # numerical target we want to reach as solution
 target = 0
-
 #counter starts at 1 for the first try
 counter = 0
-
 # Height and base width of pyramid
 size = 0
 
@@ -51,17 +49,17 @@ with open("pyramid_sample_input.txt", "r") as file:
                 #multiply count with the next number
                 count = count * int(pyramid[x][index]) 
 
-        #check if solution is correct, or move to next
+        #check if solution is correct (does not break due to possibility for multiple solutions)    
         if count == target:
             for letter in solution:
                 print(letter, end="")
+            print("")
+        
+        #change solution method updates to the next possible solution, see helpers.py
+        counter +=1        
+        change_solution(solution, counter)
+
+        #amount of possible solutions is limited to 2^n where n is the size of the pyramid
+        if counter == 2 ** (size - 1):
             break
-        else:
-            counter +=1
-            #change solution method updates to the next possible solution, see helpers.py
-            change_solution(solution, counter)
-            #amount of possible solutions is limited to 2^n where n is the size of the pyramid, so if we reach here, no solution exists.
-            if counter == 2 ** size:
-                print("no solution exists")
-                break
         
