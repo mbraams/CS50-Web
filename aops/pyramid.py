@@ -26,7 +26,8 @@ with open("pyramid_sample_input.txt", "r") as file:
     # "create_letters" creates solution string and return value is the size
     size = create_letters(file, letters)
 
-    for x in range(32):
+    #test the solution methods
+    for x in range(31):
         
         counter += 1
         print("counter: ", counter)
