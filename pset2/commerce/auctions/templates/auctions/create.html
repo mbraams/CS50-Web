@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+{% load bootstrap %}
+
+{% block title %}
+Create Listing
+{% endblock %}
+
+{% block body %}
+<h2>Create listing</h2>
+<form action="{% url 'create' %}" method="post">
+    {% csrf_token%}
+    {{ form|bootstrap_horizontal }}
+    <input type="submit" method="POST">
+</form>
+{% endblock %}
