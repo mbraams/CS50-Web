@@ -1,21 +1,25 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from django.forms import ModelForm
 
-from .models import User
+from .models import *
 
-class NewListing(forms.Form):
-    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title'}), max_length=100)
-    text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description'}), label='Description')
-    image = forms.ImageField(label='Picture', required=False)
-    category = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'Category'}), max_length=50, required=False)
+class NewListing(ModelForm):
+    class Meta:
+        model = Listing
+        fields = ['name', 'description', 'category', 'image', 'price']
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Listing.objects.all()
+    return render(request, "auctions/index.html", {
+        "listings": listings
+    })
 
 
 def login_view(request):
@@ -29,7 +33,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return redirect("index")
         else:
             return render(request, "auctions/login.html", {
                 "message": "Invalid username and/or password."
@@ -69,20 +73,26 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+@login_required
 def create(request):
-    if request.method == "post":
-        list_form = NewListing(request.post)
-        if list_form.is_valid():
-            form = list_form.cleaned_data()
-            title = form["title"]
-            description = form["text"]
-            image = form["image"]
+    if request.method == "POST":
+        listing = NewListing(request.POST)
+        if listing.is_valid():
+            form = listing.cleaned_data
+            title = form["name"]
+            description = form["description"]
+            image = form["image"]            
+            category = form["category"]
+            price = form["price"]
+            user = User.objects.get(username=request.user)
             #add into sql database
-            return HttpResponseRedirect(reverse("index"))
+            f = Listing(description = description, name = title, image = image, category = category, user=user, price=price)
+            f.save()
+            
+            return HttpResponseRedirect('/')
         else:
             return render(request, "auctions/create.html",{
-                "form" : list_form
-            })
+                "form" : listing})
     else:
         form = NewListing()
         return render(request, "auctions/create.html",{

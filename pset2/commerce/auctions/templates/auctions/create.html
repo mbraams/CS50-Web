@@ -7,9 +7,9 @@ Create Listing
 
 {% block body %}
 <h2>Create listing</h2>
-<form action="{% url 'create' %}" method="post">
-    {% csrf_token%}
+<form action="{% url 'create' %}" method="POST">
+    {% csrf_token %}
     {{ form|bootstrap_horizontal }}
-    <input type="submit" method="POST">
+    <input type="submit" method="POST" value="Submit">
 </form>
 {% endblock %}
