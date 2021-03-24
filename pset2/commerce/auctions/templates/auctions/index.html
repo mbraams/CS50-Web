@@ -6,9 +6,7 @@
     <ul>
    {% for listing in listings %}
    <li>
-    <div>Title: {{listing.name}}</div>
-    
-    <div>Description: {{listing.description}}</div>
+    <div><a href ="{% url 'listing' listing.id %}">Title: {{listing.name}}</a></div>    
     <div>Price = ${{listing.price}}</div>
     </li>
     <br>

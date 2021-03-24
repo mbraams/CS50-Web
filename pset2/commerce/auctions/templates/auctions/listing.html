@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% if message %}
+{{message}}
+{% endif %}
+<div><h2>{{listing.name}}</h2></div>
+<div>{{listing.image}}</div>
+<div>{{listing.description}}</div>
+<div>{{listing.price}}</div>
+<form action="{% url 'listing' listing.id %}" method="POST">
+    {%csrf_token%}
+    <div>{{bid}} <input type="submit" method="POST" value="Submit"></div>
+</form>
+{% endblock %}

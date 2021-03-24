@@ -14,6 +14,11 @@ class NewListing(ModelForm):
         model = Listing
         fields = ['name', 'description', 'category', 'image', 'price']
 
+class NewBid(ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['bid']
+
 
 def index(request):
     listings = Listing.objects.all()
@@ -99,4 +104,28 @@ def create(request):
             "form" : form
         })
 
+def listing(request, listing_id):
+    listing = Listing.objects.get(id=listing_id)
+    if request.method == 'POST':
+        bid = NewBid(request.POST)
+        if bid.is_valid():
+            form = bid.cleaned_data
+            price = form["bid"]
+            print(price)
+            print(listing.price)
+            if price > listing.price:
+                newbid = Bid(bid = price, user = User.objects.get(username=request.user))
+                newbid.save()
+                listing.price = price
+            else:
+                return render (request, "auctions/listing.html",{
+            "listing" : listing, "bid" : bid, "message" : "amount not sufficient"
+        })
+
+
+    else:            
+        bid = NewBid()
+        return render (request, "auctions/listing.html",{
+            "listing" : listing, "bid" : bid
+        })
 
