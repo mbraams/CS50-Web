@@ -91,9 +91,8 @@ def create(request):
             price = form["price"]
             user = User.objects.get(username=request.user)
             #add into sql database
-            f = Listing(description = description, name = title, image = image, category = category, user=user, price=price)
-            f.save()
-            
+            f = Listing(description = description, name = title, image = image, category = category, owner=user, price=price)
+            f.save()            
             return HttpResponseRedirect('/')
         else:
             return render(request, "auctions/create.html",{
@@ -111,21 +110,38 @@ def listing(request, listing_id):
         if bid.is_valid():
             form = bid.cleaned_data
             price = form["bid"]
-            print(price)
-            print(listing.price)
             if price > listing.price:
                 newbid = Bid(bid = price, user = User.objects.get(username=request.user))
+                #save as bid
                 newbid.save()
+                #connect bid to the listing
+                listing.bid.add(newbid)
+                #update price with new (higher) bid
                 listing.price = price
+                listing.save()
+                return HttpResponseRedirect("/")
             else:
                 return render (request, "auctions/listing.html",{
-            "listing" : listing, "bid" : bid, "message" : "amount not sufficient"
+            "listing" : listing, "bid" : bid, "message" : "Amount not sufficient"
         })
 
 
     else:            
         bid = NewBid()
+        
+        #if listing.owner.id == User.objects.get(id=request.user):
+            #replace with close button
+         #   pass
+            
+
         return render (request, "auctions/listing.html",{
-            "listing" : listing, "bid" : bid
+            "listing" : listing, 
+            "bid" : bid
         })
 
+@login_required
+def watchlist(request):
+    watchlist = Watchlist.objects.filter(user=request.user)
+    return render (request, "auctions/watchlist.html", {
+        "watchlist" : watchlist
+    })
