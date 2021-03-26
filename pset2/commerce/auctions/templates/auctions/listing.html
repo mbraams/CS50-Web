@@ -9,9 +9,14 @@
 {{message}}
 {% endif %}
 <div><h2>{{listing.name}}</h2></div>
+<form action="{% url 'listing' listing.id %}" method="POST">
+    {%csrf_token%}
+    <div>Add to / remove from watchlist: <button name="button" value="watchlist" method="POST">Watchlist</button></div>
+</form>
+
 <div>{{listing.image}}</div>
 <div>{{listing.description}}</div>
-<div>{{listing.price}}</div>
+<div>Price: ${{listing.price}}</div>
 <div>highest bidder: {{listing.bid.last.user.username}}</div>
 <form action="{% url 'listing' listing.id %}" method="POST">
     {%csrf_token%}

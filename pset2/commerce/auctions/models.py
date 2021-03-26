@@ -3,12 +3,12 @@ from django.db import models
 
 
 Categories = [
-    ('a', 'Clothes'), 
+    ('a', 'Other'), 
     ('b', 'Electronics'),
     ('c', 'Home'),
     ('d', 'Sports'),
     ('e','Toys'),
-    ('f', 'Other')]
+    ('f', 'Clothes')]
 
 class User(AbstractUser):
     def __str__(self):
@@ -47,3 +47,6 @@ class Listing(models.Model):
 class Watchlist(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user} has this listing on their watchlist: {self.listing}"

@@ -105,38 +105,52 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
+    watchlist =  Watchlist.objects.filter(user=request.user)              
+    bid = NewBid()  
     if request.method == 'POST':
-        bid = NewBid(request.POST)
-        if bid.is_valid():
-            form = bid.cleaned_data
-            price = form["bid"]
-            if price > listing.price:
-                newbid = Bid(bid = price, user = User.objects.get(username=request.user))
-                #save as bid
-                newbid.save()
-                #connect bid to the listing
-                listing.bid.add(newbid)
-                #update price with new (higher) bid
-                listing.price = price
-                listing.save()
-                return HttpResponseRedirect("/")
+        if request.POST.get("button") == 'watchlist':
+            if not watchlist.filter(listing=listing):
+                Watchlist(listing = listing, user = request.user).save()
+                message = "Added to watchlist!"
             else:
-                return render (request, "auctions/listing.html",{
-            "listing" : listing, "bid" : bid, "message" : "Amount not sufficient"
-        })
-
-
-    else:            
-        bid = NewBid()
+                watchlist.filter(listing=listing).delete()
+                message = "Removed from watchlist!"
+            return render (request, "auctions/listing.html",{
+                "listing" : listing,                
+                "watchlist" : watchlist,
+                "bid" : bid,
+                "message" : message
+            })
+        #else its a bid
+        else:
+            bid = NewBid(request.POST)
+            if bid.is_valid():
+                form = bid.cleaned_data
+                price = form["bid"]
+                if price > listing.price:
+                    newbid = Bid(bid = price, user = User.objects.get(username=request.user))
+                    #save as bid
+                    newbid.save()
+                    #connect bid to the listing
+                    listing.bid.add(newbid)
+                    #update price with new (higher) bid
+                    listing.price = price
+                    listing.save()
+                    return HttpResponseRedirect("/")
+                else:
+                    return render (request, "auctions/listing.html",{
+                "listing" : listing,
+                "bid" : bid, 
+                "message" : "Amount not sufficient",
+                "watchlist" : watchlist
+            })
         
-        #if listing.owner.id == User.objects.get(id=request.user):
-            #replace with close button
-         #   pass
-            
 
+    else:  
         return render (request, "auctions/listing.html",{
             "listing" : listing, 
-            "bid" : bid
+            "bid" : bid,
+            "watchlist" : watchlist
         })
 
 @login_required
@@ -144,4 +158,19 @@ def watchlist(request):
     watchlist = Watchlist.objects.filter(user=request.user)
     return render (request, "auctions/watchlist.html", {
         "watchlist" : watchlist
+    })
+
+def categories(request):
+    
+    return render(request, "auctions/categories.html", {
+        "categories" : Categories
+    })
+
+def category_list(request, cat):
+    categories = dict(Categories)
+    category = categories.get(cat)
+    listings = Listing.objects.filter(category=cat)
+    return render(request, "auctions/category.html",{
+        "category" : category,
+        "listings" : listings
     })
