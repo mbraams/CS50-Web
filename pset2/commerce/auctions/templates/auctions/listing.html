@@ -57,4 +57,9 @@
     {% endif %}
 {% endif %}
 
+<form action="{% url 'listing' listing.id %}" method="POST">
+    {%csrf_token%}
+    <div>{{comment}} <input name="comment" type="submit" method="POST"></div>
+</form>
+
 {% endblock %}

@@ -19,6 +19,11 @@ class NewBid(ModelForm):
         model = Bid
         fields = ['bid']
 
+class NewComment(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']
+
 
 def index(request):
     listings = Listing.objects.all()
@@ -103,12 +108,15 @@ def create(request):
             "form" : form
         })
 
+@login_required
 def listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
     print(listing.image)
     watchlist =  Watchlist.objects.filter(user=request.user)              
     bid = NewBid()  
+    comment = NewComment()
     if request.method == 'POST':
+        message = ""
         if request.POST.get("button") == 'watchlist':
             if not watchlist.filter(listing=listing):
                 Watchlist(listing = listing, user = request.user).save()
@@ -122,7 +130,20 @@ def listing(request, listing_id):
             listing.closed = True
             listing.save()
             message = "Listing closed!"
-            
+
+        elif "comment" in request.POST:
+            commentform = NewComment(request.POST)
+            if commentform.is_valid():
+                newcomment = commentform.cleaned_data
+                print("newcomment is: ", newcomment)
+                comment = newcomment["comment"]
+                print("comment is :", comment)
+                Comment(user=request.user, comment=comment).save()
+                message = "comment submitted!"
+            else:
+                comment = commentform
+                message = "Error submitting your comment"
+
         #else its a bid
         else:
             bid = NewBid(request.POST)
@@ -147,14 +168,16 @@ def listing(request, listing_id):
             "listing" : listing, 
             "bid" : bid,
             "watchlist" : watchlist,
-            "message" : message
+            "message" : message,
+            "comment" : comment
         })
 
     else:   
         return render (request, "auctions/listing.html",{
             "listing" : listing, 
             "bid" : bid,
-            "watchlist" : watchlist
+            "watchlist" : watchlist,
+            "comment" : comment
         })
 
 @login_required

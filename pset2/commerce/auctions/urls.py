@@ -11,6 +11,7 @@ urlpatterns = [
     path("watchlist", views.watchlist, name="watchlist"),
     path("categories", views.categories, name="categories"),
     path("<int:listing_id>", views.listing, name="listing"),
+    #these two dont get accesed right now
     path("<cat>", views.category_list, name="category_list"),
     path("closed", views.closedpages, name="closed")
     ]

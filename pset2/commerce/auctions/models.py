@@ -28,6 +28,8 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def __str__(self):
+        return f"{self.time}: {self.user} : {self.comment}"
 
 
 class Listing(models.Model):
@@ -40,7 +42,7 @@ class Listing(models.Model):
     bid = models.ManyToManyField(Bid, blank=True)
     time = models.DateTimeField(auto_now_add=True, blank=True)
     closed = models.BooleanField(default=False)
-    comments = models.ManyToManyField(Comment, blank=True)
+    comments = models.ManyToManyField(Comment, blank=True, max_length=250)
 
     def __str__(self):
         return f"{self.name} is being listed by {self.owner}."
