@@ -7,11 +7,13 @@
 {% block body %}
     <ul>
     {% for listing in listings %}
+    {% if not listing.closed %}
     <li>
      <div><a href ="{% url 'listing' listing.id %}">Title: {{listing.name}}</a></div>    
      <div>Price = ${{listing.price}}</div>
      </li>
      <br>
+     {% endif %}
      {% endfor %}    
      </ul>
 {% endblock %}

@@ -86,7 +86,7 @@ def create(request):
             form = listing.cleaned_data
             title = form["name"]
             description = form["description"]
-            image = form["image"]            
+            image = form["image"]    
             category = form["category"]
             price = form["price"]
             user = User.objects.get(username=request.user)
@@ -105,6 +105,7 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
+    print(listing.image)
     watchlist =  Watchlist.objects.filter(user=request.user)              
     bid = NewBid()  
     if request.method == 'POST':
@@ -115,12 +116,13 @@ def listing(request, listing_id):
             else:
                 watchlist.filter(listing=listing).delete()
                 message = "Removed from watchlist!"
-            return render (request, "auctions/listing.html",{
-                "listing" : listing,                
-                "watchlist" : watchlist,
-                "bid" : bid,
-                "message" : message
-            })
+
+        #auction gets closed by owner    
+        elif (request.POST.get("button") == "close"):
+            listing.closed = True
+            listing.save()
+            message = "Listing closed!"
+            
         #else its a bid
         else:
             bid = NewBid(request.POST)
@@ -137,16 +139,18 @@ def listing(request, listing_id):
                     listing.price = price
                     listing.save()
                     return HttpResponseRedirect("/")
+                #bid isnt high enough
                 else:
-                    return render (request, "auctions/listing.html",{
-                "listing" : listing,
-                "bid" : bid, 
-                "message" : "Amount not sufficient",
-                "watchlist" : watchlist
-            })
-        
+                    message = "Amount not sufficient" 
 
-    else:  
+        return render (request, "auctions/listing.html",{
+            "listing" : listing, 
+            "bid" : bid,
+            "watchlist" : watchlist,
+            "message" : message
+        })
+
+    else:   
         return render (request, "auctions/listing.html",{
             "listing" : listing, 
             "bid" : bid,
@@ -172,5 +176,11 @@ def category_list(request, cat):
     listings = Listing.objects.filter(category=cat)
     return render(request, "auctions/category.html",{
         "category" : category,
+        "listings" : listings
+    })
+
+def closedpages(request):
+    listings = Listing.objects.filter(closed=True)
+    return render(request, "auctions/closed.html", {
         "listings" : listings
     })
