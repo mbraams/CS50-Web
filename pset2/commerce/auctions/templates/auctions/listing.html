@@ -57,9 +57,14 @@
     {% endif %}
 {% endif %}
 
+<h4>Comments:</h4>
+{% for comments in listing.comments.all %}
+<div>{{comments}} </div>
+{% endfor %}
+
 <form action="{% url 'listing' listing.id %}" method="POST">
     {%csrf_token%}
-    <div>{{comment}} <input name="comment" type="submit" method="POST"></div>
+    <div>{{commentform}} <input name="comment_input" type="submit" method="POST" value="Submit comment"></div>
 </form>
 
 {% endblock %}

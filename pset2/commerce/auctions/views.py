@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
 from django.forms import ModelForm
@@ -131,15 +131,23 @@ def listing(request, listing_id):
             listing.save()
             message = "Listing closed!"
 
+        #user commits a comment
         elif "comment" in request.POST:
             commentform = NewComment(request.POST)
             if commentform.is_valid():
-                newcomment = commentform.cleaned_data
-                print("newcomment is: ", newcomment)
-                comment = newcomment["comment"]
-                print("comment is :", comment)
-                Comment(user=request.user, comment=comment).save()
+                cleanedcomment = commentform.cleaned_data
+                comment = cleanedcomment["comment"]
+                newcomment = Comment(user=request.user, comment=comment)
+                newcomment.save()
+
+                #add comment to listing
+                listing.comments.add(newcomment)
+                listing.save()
                 message = "comment submitted!"
+                
+                #create new form for additional comments
+                comment = NewComment()
+                
             else:
                 comment = commentform
                 message = "Error submitting your comment"
@@ -169,15 +177,16 @@ def listing(request, listing_id):
             "bid" : bid,
             "watchlist" : watchlist,
             "message" : message,
-            "comment" : comment
+            "commentform" : comment
         })
 
-    else:   
+    else:
+         
         return render (request, "auctions/listing.html",{
             "listing" : listing, 
             "bid" : bid,
             "watchlist" : watchlist,
-            "comment" : comment
+            "commentform" : comment
         })
 
 @login_required
@@ -203,6 +212,7 @@ def category_list(request, cat):
     })
 
 def closedpages(request):
+    print("now in closed")
     listings = Listing.objects.filter(closed=True)
     return render(request, "auctions/closed.html", {
         "listings" : listings

@@ -29,7 +29,7 @@ class Comment(models.Model):
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
-        return f"{self.time}: {self.user} : {self.comment}"
+        return f"{self.user} : {self.comment}"
 
 
 class Listing(models.Model):
