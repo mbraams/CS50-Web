@@ -9,8 +9,13 @@ Auctions
    {% for listing in listings %}
     {% if not listing.closed %}
         <li>
-        <div><a href ="{% url 'listing' listing.id %}">Title: {{listing.name}}</a></div>    
-        <div>Price = ${{listing.price}}</div>
+        <div><strong>Name: </strong> <a href ="{% url 'listing' listing.id %}">{{listing.name}}</a></div>  
+        {% if listing.image %}
+        <div class="image"><img src="{{listing.image}}" width="300" height=auto alt="image of auctioned item"></div>
+        {% endif %}
+        <div><strong>Description:</strong> {{listing.description}}</div>  
+        <div><strong>Current Price</strong> = ${{listing.price}}</div>
+        <div><strong>Seller: </strong> {{listing.owner}}</div>
         </li>
         <br>
         {% endif %}

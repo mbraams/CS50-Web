@@ -10,7 +10,7 @@
     </head>
     <body>
         <h1>Auctions</h1>
-        <div>
+        <div class="centered">
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
             {% else %}
@@ -36,7 +36,7 @@
                     <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    <a class="nav-link" style="float: right;" href="{% url 'logout' %}">Log Out</a>
                 </li>                
             {% else %}
                 <li class="nav-item">
@@ -48,7 +48,9 @@
             {% endif %}
         </ul>
         <hr>
-        {% block body %}
-        {% endblock %}
+        <div class="body_extension">
+            {% block body %}
+            {% endblock %}
+        </div>
     </body>
 </html>

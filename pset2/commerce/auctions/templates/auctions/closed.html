@@ -9,9 +9,20 @@ Closed Listings
     <ul>
     {% for listing in listings %}
         <li>
-        <div><a href ="{% url 'listing' listing.id %}">Title: {{listing.name}}</a></div>    
-        <div>Price = ${{listing.price}}</div>
-        <div>Winner = {{listing.bid.last.user.username}}</div>
+        <div><strong>Name: </strong> <a href ="{% url 'listing' listing.id %}">{{listing.name}}</a></div>  
+        {% if listing.image %}
+            <div class="image"><img src="{{listing.image}}" width="300" height=auto alt="image of auctioned item"></div>
+        {% endif %}
+        <div><strong>Description:</strong> {{listing.description}}</div> 
+        
+        {% if listing.bid.last.user %}   
+            <div>Winner = {{listing.bid.last.user.username}}</div>
+            <div><strong>Sold for:</strong> ${{listing.price}}</div> 
+        {% else %}
+            <div>No bids were placed</div>
+        {% endif %}
+
+        <div><strong>Seller: </strong> {{listing.owner}}</div>
         </li>
         <br>
     {% endfor %}    

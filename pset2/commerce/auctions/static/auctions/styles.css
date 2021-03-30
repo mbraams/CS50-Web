@@ -1,3 +1,59 @@
 body {
     padding: 10px;
+    background-color: lightgray;
+}
+
+h1, h2, h4 {
+    text-align: center;
+}
+
+.centered{
+    text-align: center;
+}
+
+button{
+    right: 10%;
+    margin-right: 10%;
+    margin-left: auto;
+}
+
+.body_extension{
+    max-width: 40%;
+    margin-left: 30%;
+    margin-right: 30%;
+    background-color:  beige;
+    border-style: inset;
+    border-width: 5px;
+    border-color: darkslategray;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.comment{
+    text-align: center;
+    background-color: lightskyblue;
+    color:darkslategray;
+    border-radius: 5px;
+    border-style: groove ;
+    border-width: 1px;
+    border-color:  darkslategrey;
+    margin: 1px;
+}
+
+#logout{
+    float: right;
+}
+
+.image{
+    display:block;
+    width:60%;
+    margin:auto;
+
+}
+
+.commentform{
+    width:80%;
+    height: 10%;
+    margin-left: auto;
+    margin-right: auto;
 }

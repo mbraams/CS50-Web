@@ -8,7 +8,7 @@
 
 {% block body %}
 {% if message %}
-    {{message}}
+    <div class="alert alert-success" role="alert">{{message}}</div>
 {% endif %}
 <div><h2>{{listing.name}}</h2></div>
 {% if listing.owner == request.user and not listing.closed %}
@@ -19,7 +19,7 @@
 {% endif %}
 
 {% if listing.closed and listing.bid.last.user == request.user%}
-    <div>Congratulations, you won this bid!</div>
+    <div class="alert alert-info" role="alert">Congratulations, you won this bid!</div>
 {% endif %}
 
 <form action="{% url 'listing' listing.id %}" method="POST">
@@ -28,17 +28,17 @@
 </form>
 
 {% if not listing.image %}
-    <img src="{% static 'auctions/images/placeholder.png' %}" alt="placeholder image" width="150">
+    <img class="image" src="{% static 'auctions/images/placeholder.png' %}" alt="placeholder image" width="150">
 {% else %}
     <div><img src="{{listing.image}}" width="300" height=auto alt="image of auctioned item"></div>
 {% endif %}
 
-<div>{{listing.description}}</div>
-<div>Price: ${{listing.price}}</div>
+<div><strong>Description: </strong>{{listing.description}}</div>
+<div><strong>Price:</strong> ${{listing.price}}</div>
 
 {% if not listing.closed %}
     {% if listing.bid.last.user %}
-        <div>Highest bidder: {{listing.bid.last.user.username}}</div>
+        <div><strong>Highest bidder:</strong> {{listing.bid.last.user.username}}</div>
 
     {% else %}
         <div>No bids yet!</div>
@@ -51,7 +51,7 @@
 
 {% else %}
     {% if listing.bid.last.user %}
-        <div>Winner: {{listing.bid.last.user.username}}</div>
+        <div><strong>Winner:</strong> {{listing.bid.last.user.username}}</div>
     {% else %}
         <div>No bids were placed.</div>
     {% endif %}
@@ -59,12 +59,12 @@
 
 <h4>Comments:</h4>
 {% for comments in listing.comments.all %}
-<div>{{comments}} </div>
+<div class="comment">{{comments}} </div>
 {% endfor %}
 
 <form action="{% url 'listing' listing.id %}" method="POST">
     {%csrf_token%}
-    <div>{{commentform}} <input name="comment_input" type="submit" method="POST" value="Submit comment"></div>
+    <div class="commentform">{{commentform}} <input name="comment_input" type="submit" method="POST" value="Submit comment" style="text-align: center;"></div>
 </form>
 
 {% endblock %}
