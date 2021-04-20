@@ -49,6 +49,7 @@ function compose_email() {
     .catch(error => {
       console.log(`Error, ${error}`);
     });
+    return false;
   } 
 }
 
@@ -59,7 +60,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
-  emailView = document.querySelector('#emails-view');
+  const emailView = document.querySelector('#emails-view');
   emailView.innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   
@@ -72,9 +73,9 @@ function load_mailbox(mailbox) {
       // Print emails
       const div = document.createElement('div');
       emails.forEach((element) => {
-      div.innerHTML = `Sender: ${element.sender}, subject: ${element.subject}, time: ${element.timestamp}`;
-      emailView.append(div);
-      console.log(`${div} was sent succesfully`);
+        div.innerHTML = `Sender: ${element.sender}, subject: ${element.subject}, time: ${element.timestamp}`;
+        emailView.append(div);
+        console.log(`${div} was sent succesfully`);
       });
     })
     .catch(error => {
