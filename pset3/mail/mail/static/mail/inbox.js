@@ -16,6 +16,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#email-view').style.display = 'none';
 
   // Define variables
   const recipient = document.querySelector('#compose-recipients')
@@ -76,16 +77,14 @@ function load_mailbox(mailbox) {
         const mail = document.createElement('div');
         mail.className = "emailheader";
         mail.innerHTML = `Sender: ${element.sender}, subject: ${element.subject}, time: ${element.timestamp}`;
-        if (element.read === true){
+        if (element.read) {
           mail.style.backgroundColor = 'gray';
         }
         //open mail
-        mail.onclick = function(){
-          //mark email as read
-          element.read = true;
+        mail.onclick = function () {
           open_mail(element);
         }
-        
+
         emailView.append(mail);
       });
     })
@@ -96,11 +95,21 @@ function load_mailbox(mailbox) {
 }
 
 function open_mail(element) {
-  
+  //empty previous opened emails
+  document.querySelector('#email-view').innerHTML = '';
 
-  //open email and close rest
-  document.querySelector('#email-views').style.display = 'none';
+  //open email and close rest  
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'block';
+
+  //set email to 'read'
+  fetch(`/emails/${element.id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      read: true
+    })
+  })
 
   //create divs
   const from = document.createElement('div');
@@ -109,14 +118,54 @@ function open_mail(element) {
   const time = document.createElement('div');
   const message = document.createElement('div');
   message.className = "body";
+  const archive = document.createElement('button');
+  const reply = document.createElement('button');
 
-  from.innerHTML = element.sender;
-  to.innerHTML = element.recipients;
-  subject.innerHTML = element.subject;
-  time = element.timestamp;
-  const body = element.body;
+  //give divs text
+  from.innerHTML = `From: ${element.sender}`;
+  to.innerHTML = `To: ${element.recipients}`;
+  subject.innerHTML = `Subject: ${element.subject}`;
+  time.innerHTML = `Sent on: ${element.timestamp}`;
+  message.innerHTML = element.body;
+  reply.innerHTML = 'Reply';
 
-  document.querySelector('#email-view').append(from, to, subject, time, message);
+  //button and method for archiving
+  if (element.archived) {
+    archive.innerHTML = 'Unarchive';
+  } else {
+    archive.innerHTML = 'Archive';
+  }
+  archive.onclick = function () {
+    //fetch put request
+    archive_email(element);
+  }
 
+  //button for replying
+  reply.onclick = function() {
+    compose_email();
+
+    //prefill form
+    document.querySelector('#compose-recipients').value = element.sender;  
+    // make sure the Re: doesn't repeat on longer conversations  
+    if(element.subject.startsWith("Re:")){
+      document.querySelector('#compose-subject').value = element.subject;
+    } else {
+      document.querySelector('#compose-subject').value = `Re: ${element.subject}`;
+    }
+    document.querySelector('#compose-body').value = `"On ${element.timestamp}, ${element.sender} wrote:" ${element.body}`
+  }
+  
+  //build the actual email
+  document.querySelector('#email-view').append(from, to, time, subject, message, archive, reply);
 }
 
+function archive_email(email) {
+  fetch(`/emails/${email.id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: !email.archived
+    })
+  })
+    //return to inbox
+    .then(response => load_mailbox('inbox'))
+}

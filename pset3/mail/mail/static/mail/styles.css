@@ -1,9 +1,22 @@
 textarea {
     min-height: 400px;
 }
-
+button{
+    margin: 2px;
+    padding: 2px;
+}
 .emailheader {
     border: 1px, black;
     border-style: ridge;
     padding: 2px;
+}
+
+.body {
+    border: 1px, black;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 2px;
+    text-align: center;
+    height: 40%;
 }
