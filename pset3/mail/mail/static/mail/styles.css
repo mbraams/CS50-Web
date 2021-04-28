@@ -11,12 +11,14 @@ button{
     padding: 2px;
 }
 
+
 .body {
-    border: 1px, black;
+    white-space: pre-wrap;
+    min-height: 300px;
+    border: 1px, blue;
     border-style: solid;
     border-radius: 5px;
     padding: 2px;
     margin: 2px;
     text-align: center;
-    height: 40%;
 }

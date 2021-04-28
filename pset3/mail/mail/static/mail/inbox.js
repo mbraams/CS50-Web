@@ -46,10 +46,12 @@ function compose_email() {
       .then(response => response.json())
       .then(result => {
         console.log(result);
+        load_mailbox('sent')
       })
       .catch(error => {
         console.log(`Error, ${error}`);
       });
+    
     return false;
   }
 }
@@ -154,7 +156,7 @@ function open_mail(element) {
     }
     document.querySelector('#compose-body').value = `"On ${element.timestamp}, ${element.sender} wrote:" ${element.body}`
   }
-  
+
   //build the actual email
   document.querySelector('#email-view').append(from, to, time, subject, message, archive, reply);
 }
