@@ -1,3 +1,9 @@
 textarea {
     min-height: 400px;
 }
+
+.emailheader {
+    border: 1px, black;
+    border-style: ridge;
+    padding: 2px;
+}
