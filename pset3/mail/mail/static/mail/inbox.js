@@ -51,7 +51,7 @@ function compose_email() {
       .catch(error => {
         console.log(`Error, ${error}`);
       });
-    
+
     return false;
   }
 }
@@ -82,6 +82,7 @@ function load_mailbox(mailbox) {
         if (element.read) {
           mail.style.backgroundColor = 'gray';
         }
+
         //open mail
         mail.onclick = function () {
           open_mail(element);
@@ -143,13 +144,13 @@ function open_mail(element) {
   }
 
   //button for replying
-  reply.onclick = function() {
+  reply.onclick = function () {
     compose_email();
 
     //prefill form
-    document.querySelector('#compose-recipients').value = element.sender;  
+    document.querySelector('#compose-recipients').value = element.sender;
     // make sure the Re: doesn't repeat on longer conversations  
-    if(element.subject.startsWith("Re:")){
+    if (element.subject.startsWith("Re:")) {
       document.querySelector('#compose-subject').value = element.subject;
     } else {
       document.querySelector('#compose-subject').value = `Re: ${element.subject}`;
@@ -157,8 +158,20 @@ function open_mail(element) {
     document.querySelector('#compose-body').value = `"On ${element.timestamp}, ${element.sender} wrote:" ${element.body}`
   }
 
+  //add button for marking as unread
+  const read = document.createElement('button');
+  read.innerHTML = 'Mark as unread';
+  read.onclick = function () {
+    fetch(`/emails/${element.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        read: false
+      })
+    })
+  }
+
   //build the actual email
-  document.querySelector('#email-view').append(from, to, time, subject, message, archive, reply);
+  document.querySelector('#email-view').append(from, to, time, subject, message, archive, reply, read);
 }
 
 function archive_email(email) {
