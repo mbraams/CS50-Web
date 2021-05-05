@@ -3,12 +3,23 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms
+from .models import User, Post
 
-from .models import User
+from django.views.decorators.csrf import csrf_exempt
 
+
+class NewPost(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['content']
 
 def index(request):
-    return render(request, "network/index.html")
+    newpost = NewPost()
+
+    return render(request, "network/index.html", {
+        "newpost" : newpost
+    })
 
 
 def login_view(request):
@@ -61,3 +72,20 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+@csrf_exempt
+def newposts(request):
+     #this is for composing posts
+    if request.method == "POST":
+        print("in newpost")
+        data = json.loads(request.body)
+        owner = request.user
+        message = data.get("body", "")
+        post = Post(content=data, user=owner)
+        post.save()
+        return JsonResponse({"message": "Email sent successfully."}, status=201)
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
+        

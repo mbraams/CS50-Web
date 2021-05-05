@@ -1,5 +1,12 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    {% if user.is_authenticated %}
+        <div>
+            <form>
+                <input type="text" id="newmessage">
+                <div><input type="submit" id="submitmessage"></div>                
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}
