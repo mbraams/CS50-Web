@@ -1,5 +1,6 @@
 {% extends "network/layout.html" %}
 
+
 {% block body %}
     {% if user.is_authenticated %}
         <div>
@@ -10,3 +11,22 @@
         </div>
     {% endif %}
 {% endblock %}
+<script>
+    document.querySelector("#submitmessage").onclick = function() {
+        console.log("i was clicked");
+        let message = document.querySelector("#newmessage").value;
+        fetch('/newpost', {
+            method: 'POST',
+            body: JSON.stringify({
+                body: message
+            })
+          })
+          .then(response => response.json())
+          .then(result => {
+              // Print result
+              console.log(result);
+          });
+        console.log("before returning false");
+        return false;
+    }
+</script>

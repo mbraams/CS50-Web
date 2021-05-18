@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from .models import User, Post
+import json
+from django.http import JsonResponse
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -86,6 +88,7 @@ def newposts(request):
         return JsonResponse({"message": "Email sent successfully."}, status=201)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
+
 
 
         
