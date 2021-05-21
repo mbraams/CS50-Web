@@ -5,28 +5,17 @@
     {% if user.is_authenticated %}
         <div>
             <form>
-                <input type="text" id="newmessage">
-                <div><input type="submit" id="submitmessage"></div>                
+                <div><input type="text" id="newmessage"></div>
+                <div class="submit"><input type="submit" id="submitmessage"></div>                
             </form>
         </div>
     {% endif %}
+
+    {% for post in posts %}
+    <div class="post">
+    <div class="name"><strong>{{post.user}}</strong></div>
+    <div class="time">{{post.timestamp}}</div>
+    <div id="content">{{post.content}}</div>
+    </div>
+    {% endfor %}
 {% endblock %}
-<script>
-    document.querySelector("#submitmessage").onclick = function() {
-        console.log("i was clicked");
-        let message = document.querySelector("#newmessage").value;
-        fetch('/newpost', {
-            method: 'POST',
-            body: JSON.stringify({
-                body: message
-            })
-          })
-          .then(response => response.json())
-          .then(result => {
-              // Print result
-              console.log(result);
-          });
-        console.log("before returning false");
-        return false;
-    }
-</script>

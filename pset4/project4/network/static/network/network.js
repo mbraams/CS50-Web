@@ -1,9 +1,13 @@
-document.addEventListener('DOMContentLoaded', function(){
-    console.log("dom loaded")
+document.addEventListener('DOMContentLoaded', function(){    
+    newpost();  
+})
 
+
+function newpost(){
     document.querySelector("#submitmessage").onclick = function() {
-        console.log("i was clicked");
-        let message = document.querySelector("#newmessage").value;
+        let newmessage = document.querySelector("#newmessage");
+        let message = newmessage.value;
+        newmessage.value = "";
         fetch('/newpost', {
             method: 'POST',
             body: JSON.stringify({
@@ -14,9 +18,9 @@ document.addEventListener('DOMContentLoaded', function(){
           .then(result => {
               // Print result
               console.log(result);
-          });
-        console.log("before returning false");
+          });        
         return false;
     }
-})
+}
+
 

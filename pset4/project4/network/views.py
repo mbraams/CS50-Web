@@ -18,9 +18,10 @@ class NewPost(forms.ModelForm):
 
 def index(request):
     newpost = NewPost()
+    posts = Post.objects.all().order_by('-timestamp')
 
     return render(request, "network/index.html", {
-        "newpost" : newpost
+        "newpost" : newpost, "posts" : posts
     })
 
 
@@ -83,9 +84,9 @@ def newposts(request):
         data = json.loads(request.body)
         owner = request.user
         message = data.get("body", "")
-        post = Post(content=data, user=owner)
+        post = Post(content=message, user=owner)
         post.save()
-        return JsonResponse({"message": "Email sent successfully."}, status=201)
+        return JsonResponse({"message": "Post sent succesfully."}, status=201)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 

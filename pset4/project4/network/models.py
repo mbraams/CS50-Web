@@ -23,7 +23,9 @@ class Reaction(models.Model):
 class Post(models.Model):
     content = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    likes = models.ManyToManyField(Like)
-    reactions = models.ManyToManyField(Reaction)
+    likes = models.ManyToManyField(Like, blank=True)
+    reactions = models.ManyToManyField(Reaction, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.user} posted: {self.content}, at {self.timestamp}"
 

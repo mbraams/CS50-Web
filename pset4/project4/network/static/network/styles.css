@@ -1,0 +1,42 @@
+body{
+    background-color: honeydew;
+}
+
+form{
+    margin: 2px;
+    margin-left: 45%;
+    margin-right: 50%;
+}
+
+.post{
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 35%;
+    margin-right: 35%;
+    background-color: lightskyblue;
+    border: 2px rgb(3, 5, 7);
+    border-style: solid;
+    border-radius: 5px;
+}
+
+.submit{
+    color: lightskyblue;
+    margin: 1px;
+    margin-left: 35%;
+}
+
+.time{    
+    border-bottom: 1px solid grey;
+}
+
+.name{
+    text-align: center;
+}
+
+#content{    
+    text-align: center;
+    margin-left: 5%;
+    color: orange(59, 200, 247);
+    background-color: grey(0, 140, 255);
+    margin-right: 5%;
+}
