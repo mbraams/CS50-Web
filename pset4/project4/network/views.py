@@ -90,6 +90,11 @@ def newposts(request):
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
+def allposts(request):
+    posts = Post.objects.all().order_by('-timestamp')
+    return JsonResponse([posts.serialize() for post in posts], safe=False)
+    
+
 
 
         

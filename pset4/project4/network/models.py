@@ -28,4 +28,10 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.user} posted: {self.content}, at {self.timestamp}"
+    def serialize(self):
+        return {
+            "content": self.content,
+            "user": self.user,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p")
+        }
 
