@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function(){    
     newpost();  
-    getPosts();
 })
 
 
@@ -20,33 +19,43 @@ function newpost(){
               // Print result
               console.log(result);
           });        
-        return false;
+          
     }
 }
 
+
+//used to load posts asynchronously through JS and json instead of reloading the page which exercise calls for
 function getPosts(){
     fetch('/allposts') 
         .then(response => response.json())
         .then(posts => {
             console.log(posts);
-            posts.array.forEach(post => {               
+            const allposts = document.querySelector('#allPosts');
+            allposts.innerHTML = '';   
+            posts.forEach((post) => {    
+                        
                 
                 const container = document.createElement('div');
                 const user = document.createElement('div');
                 const time = document.createElement('div');
                 const body = document.createElement('div');
-                container.className = 'post'
+                container.className = 'post';
                 user.innerHTML = post.user;
                 user.className = 'user';
                 time.innerHTML = post.timestamp;
                 time.className = 'time';
-                body.innerHTML = post.body;
+                body.innerHTML = post.content;
                 body.className = 'content';
 
                 container.append(user, time, body);
-                document.querySelector('#allPosts').append(container)
+                console.log(container);
+                allposts.append(container)
             });
         })
+            .catch(error => {
+                console.log(`error: ${error}`);
+            })
+        
     
 }
 

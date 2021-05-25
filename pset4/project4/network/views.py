@@ -7,6 +7,7 @@ from django import forms
 from .models import User, Post
 import json
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -19,9 +20,12 @@ class NewPost(forms.ModelForm):
 def index(request):
     newpost = NewPost()
     posts = Post.objects.all().order_by('-timestamp')
+    p = Paginator(posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = p.get_page(page_number)
 
     return render(request, "network/index.html", {
-        "newpost" : newpost, "posts" : posts
+        "newpost" : newpost, "page_obj" : page_obj
     })
 
 
@@ -80,7 +84,6 @@ def register(request):
 def newposts(request):
      #this is for composing posts
     if request.method == "POST":
-        print("in newpost")
         data = json.loads(request.body)
         owner = request.user
         message = data.get("body", "")
@@ -92,7 +95,8 @@ def newposts(request):
 
 def allposts(request):
     posts = Post.objects.all().order_by('-timestamp')
-    return JsonResponse([posts.serialize() for post in posts], safe=False)
+    
+    return JsonResponse([post.serialize() for post in posts], safe=False)
     
 
 

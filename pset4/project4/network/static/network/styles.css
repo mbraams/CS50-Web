@@ -27,16 +27,57 @@ form{
 
 .time{    
     border-bottom: 1px solid grey;
+    color: darkslategray;
 }
 
-.name{
+.user{
     text-align: center;
+    font-weight: bold;
 }
 
-#content{    
+.content{    
     text-align: center;
     margin-left: 5%;
     color: orange(59, 200, 247);
     background-color: grey(0, 140, 255);
-    margin-right: 5%;
+    margin-right: 5%;    
+}
+
+.pagination{
+    text-align: center;
+    margin-left: 40%;
+    margin-right: 40%;
+}
+
+.page-item{
+    color: honeydew;
+    background-color: lightskyblue;
+    border:1px black;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 1px;
+}
+
+a {
+    color: honeydew;
+}
+
+
+button{
+    margin:2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding:1px;
+    background-color: honeydew;
+    
+    border: 2px grey;
+    border-radius: 5px;
+    color: lightskyblue;
+    width: 30%;
+}
+
+.likebar{
+    text-align: center;
+    border-top: 1px solid grey;
+    
 }
