@@ -13,16 +13,25 @@
 
     {% for post in page_obj %}
     <div class="post">
-    <div class="name"><strong>{{post.user}}</strong></div>
-    <div class="time">{{post.timestamp}}</div>
-    <div class="content">{{post.content}}</div>
-    <div class="likebar">
+    <div class='namebar'>
+        <div class="name"><strong>{{post.user}}</strong></div>
+    </div>
         
-            <button>Like</button>
-            <button>Reply</button>
+    
+    <div class="time">{{post.timestamp}}</div>
+    <div class="content">{{post.content}}
+        {% if user.username == post.user.username %}
+        <div><button class='edit'>Edit</button></div>
+    
+        {% endif %}
+    </div>
+    <div class="likebar">        
+        <button class='like' value={{post.id}}>Like</button>
+        <button>Reply</button>
     </div>
     </div>
     {% endfor %}
+    
     <nav >
         <ul class="pagination">
             {% if page_obj.has_previous %}

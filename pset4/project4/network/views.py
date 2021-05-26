@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
-from .models import User, Post
+from .models import Like, User, Post
 import json
 from django.http import JsonResponse
 from django.core.paginator import Paginator
@@ -99,6 +99,11 @@ def allposts(request):
     return JsonResponse([post.serialize() for post in posts], safe=False)
     
 
+def getlikes(request, post_id):
+    postID = post_id
+    likelist = Post.objects.filter(id=postID)
+    print(likelist)
+    return JsonResponse([like.serialize() for like in likelist], safe=False)
 
 
         

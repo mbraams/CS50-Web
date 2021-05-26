@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', function(){    
     newpost();  
+    like();
+    
+
+    
 })
 
 
@@ -23,6 +27,19 @@ function newpost(){
     }
 }
 
+function like(){
+    const likeButton = document.querySelector('.like')
+    likeButton.onclick = function(){
+        const postID = likeButton.value;
+        
+        console.log(postID);
+        fetch(`/like/${postID}`)
+            .then(response => response.json())
+            .then(likes => {
+               
+            })
+    }
+}
 
 //used to load posts asynchronously through JS and json instead of reloading the page which exercise calls for
 function getPosts(){
@@ -52,9 +69,9 @@ function getPosts(){
                 allposts.append(container)
             });
         })
-            .catch(error => {
-                console.log(`error: ${error}`);
-            })
+        .catch(error => {
+            console.log(`error: ${error}`);
+        })
         
     
 }

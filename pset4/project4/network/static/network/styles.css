@@ -30,9 +30,23 @@ form{
     color: darkslategray;
 }
 
-.user{
+.namebar{
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+.name{
+    margin-left: 45%;
+    margin-right: 45%;
+    
     font-weight: bold;
+}
+
+.edit{
+    text-align: center;
+    width: auto;
+    margin-left: 95%;
+    margin-right: 2px;
 }
 
 .content{    

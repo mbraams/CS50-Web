@@ -11,6 +11,11 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.user} liked this post."
+    def serialize(self):
+        return{
+            "user" : self.user,
+            "id" : self.id
+        }
 
 class Reaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -32,6 +37,7 @@ class Post(models.Model):
         return {
             "content": self.content,
             "user": self.user.username,
-            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p")
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+            "id" : self.id
         }
 
