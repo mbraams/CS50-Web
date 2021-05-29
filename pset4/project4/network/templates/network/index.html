@@ -19,14 +19,36 @@
         
     
     <div class="time">{{post.timestamp}}</div>
-    <div class="content">{{post.content}}
+    
+   
+    <div class="content">
+        <div class="textcontent" id="content{{post.id}}">{{post.content}}</div>
+    
         {% if user.username == post.user.username %}
-        <div><button class='edit'>Edit</button></div>
+
+        <div><button class='edit' value={{post.id}}>Edit</button></div>
+        <textarea class="editbox" id="edit-box{{post.id}}" style="display:none;"></textarea>
+        <button class="editsubmit" id="edit-submit{{post.id}}" style="display:none;">Edit post</button>
     
         {% endif %}
     </div>
+    <div class="likes" id="likes{{post.id}}" data-value={{post.likecount}}>
+        &#x2764; {{post.likecount}}
+    </div>
     <div class="likebar">        
-        <button class='like' value={{post.id}}>Like</button>
+        <button class='like' value={{post.id}}>
+
+            {% if post.id in likedposts %}
+
+            Unlike
+
+            {% else %}
+
+            Like
+
+            {% endif %}
+            
+        </button>
         <button>Reply</button>
     </div>
     </div>
@@ -35,6 +57,7 @@
     <nav >
         <ul class="pagination">
             {% if page_obj.has_previous %}
+
                 <li class="page-item">
                     <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">&laquo; Previous page                    
                     </a>
@@ -42,14 +65,17 @@
                 <li class="page-item">
                     <a href="?page=1">&laquo; First page</a>
                 </li>
+
             {% endif %}
                 
             {% if page_obj.has_next %}
+
                 <li class="page-item">
                     <a  href="?page={{ page_obj.next_page_number }}" aria-label="Next">Next page
                     <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
+
             {% endif %}
         </ul>
       </nav>

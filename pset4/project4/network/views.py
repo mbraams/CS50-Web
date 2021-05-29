@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from django.views.decorators import csrf
 from .models import Like, User, Post
 import json
 from django.http import JsonResponse
@@ -19,13 +20,19 @@ class NewPost(forms.ModelForm):
 
 def index(request):
     newpost = NewPost()
+    userLikes = Like.objects.filter(user=request.user)
+    likedposts = []
+    for like in userLikes:
+        likedposts.append(like.post.id)
     posts = Post.objects.all().order_by('-timestamp')
+    #paginate amount of posts per page
     p = Paginator(posts, 5)
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
 
+
     return render(request, "network/index.html", {
-        "newpost" : newpost, "page_obj" : page_obj
+        "newpost" : newpost, "page_obj" : page_obj, "likedposts" : likedposts
     })
 
 
@@ -98,12 +105,48 @@ def allposts(request):
     
     return JsonResponse([post.serialize() for post in posts], safe=False)
     
+@csrf_exempt
+def getlikes(request, post_id): 
+    likesOnPost = Like.objects.filter(post=post_id, user=request.user)
+    found = {'liked' : False}
+    if request.method == "GET":
+        if likesOnPost:
+            found['liked'] = True
+        return JsonResponse(found)
+    #liked/unliked
+    else:
+        if request.method == "POST":    
+            post = Post.objects.get(id=post_id)        
+            data = json.loads(request.body)
+            liked = data.get("like")
+            print(liked)
+            if liked:                
+                newlike = Like(user=request.user, post=post)
+                newlike.save()
+                message = "post liked"
+            else:
+                likesOnPost.delete()            
+                message = "like deleted"
+            post.likecount = Like.objects.filter(post=post_id).count()
+            print(post.likecount)
+            post.save()
+            return JsonResponse({"message": message}, status=201)
 
-def getlikes(request, post_id):
-    postID = post_id
-    likelist = Post.objects.filter(id=postID)
-    print(likelist)
-    return JsonResponse([like.serialize() for like in likelist], safe=False)
+@csrf_exempt
+def edit(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("content") is not None:
+            post.content = data["content"]
+            post.save()
+            return JsonResponse({"message": "Post editted"}, status=201)
+    else:
+        return JsonResponse({"error":"error, method has to be 'PUT'"})
+
+
+
+
 
 
         

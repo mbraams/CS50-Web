@@ -25,9 +25,12 @@ form{
     margin-left: 35%;
 }
 
-.time{    
+
+
+.time{
     border-bottom: 1px solid grey;
     color: darkslategray;
+
 }
 
 .namebar{
@@ -43,10 +46,11 @@ form{
 }
 
 .edit{
+    
     text-align: center;
-    width: auto;
-    margin-left: 95%;
-    margin-right: 2px;
+    width: 15%;
+    margin-left: 85%;
+    margin-right: auto;
 }
 
 .content{    
@@ -83,6 +87,7 @@ button{
     margin-right: 10px;
     padding:1px;
     background-color: honeydew;
+    height: auto;
     
     border: 2px grey;
     border-radius: 5px;
@@ -95,3 +100,25 @@ button{
     border-top: 1px solid grey;
     
 }
+
+.likes{
+    border-top: 1px solid grey;
+}
+
+.editbox{
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: center;
+}
+
+.editsubmit{
+    min-height: 20px;
+    width: 30%;
+    margin-left: 35%;
+    margin-right: 35%;
+
+}
+
+
+
