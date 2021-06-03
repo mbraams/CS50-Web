@@ -3,12 +3,14 @@ body{
 }
 
 form{
+    width: 16%;
     margin: 2px;
-    margin-left: 45%;
-    margin-right: 50%;
+    margin-left: 42%;
+    margin-right: 42%;
 }
 
 .post{
+    width: 30%;
     margin-top: 1%;
     margin-bottom: 1%;
     margin-left: 35%;
@@ -19,12 +21,26 @@ form{
     border-radius: 5px;
 }
 
+#newmessage{
+    width: 80%;
+    margin-left: 10%;
+    text-align: center;
+
+}
 .submit{
+    width: 20%;
     color: lightskyblue;
-    margin: 1px;
-    margin-left: 35%;
+    margin-top: 1px;
+    margin-left: 40%;
+    margin-right: 40%;
+    background-color: honeydew;
 }
 
+#submitpost{
+    background-color: honeydew;
+    
+    color: lightskyblue;
+}
 
 
 .time{

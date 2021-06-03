@@ -1,9 +1,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django import forms
+from django.db.models.deletion import CASCADE
+from django.db.models.fields.related import ManyToManyField
 
 
 class User(AbstractUser):
+    followers = ManyToManyField('self', blank=True)
+    follows = ManyToManyField('self', blank=True)
     def __str__(self):
         return self.username
 

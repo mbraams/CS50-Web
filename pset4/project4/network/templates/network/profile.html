@@ -1,18 +1,21 @@
 {% extends "network/layout.html" %}
 {% load static %}
 
-
 {% block body %}
-    {% if user.is_authenticated %}
-        <div>
-            <form>
-                <div><input type="text" id="newmessage"></div>
-                <div class="submit" id="submitpost"><a href="/"></a><input type="submit" id="submitmessage"></div>                
-            </form>
-        </div>
-    {% endif %}
 
-    {% for post in page_obj %}
+{{profile}}
+follows : {{follows}}
+followers: {{followers}}
+
+{% if user.is_authenticated %}
+    {% if user != profile %}
+        <button id="follow" data-profile="profile" data-user="user">
+            follow
+        </button>
+    {% endif %}
+{% endif %}
+
+{% for post in posts %}
     <div class="post">
     <div class='namebar'>
         <div class="name"><strong><a href="/profile/{{post.user.id}}">{{post.user}}</a></strong></div>
@@ -57,10 +60,10 @@
     
     <nav >
         <ul class="pagination">
-            {% if page_obj.has_previous %}
+            {% if posts.has_previous %}
 
                 <li class="page-item">
-                    <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">&laquo; Previous page                    
+                    <a href="?page={{ posts.previous_page_number }}" aria-label="Previous">&laquo; Previous page                    
                     </a>
                 </li>
                 <li class="page-item">
@@ -69,10 +72,10 @@
 
             {% endif %}
                 
-            {% if page_obj.has_next %}
+            {% if posts.has_next %}
 
                 <li class="page-item">
-                    <a  href="?page={{ page_obj.next_page_number }}" aria-label="Next">Next page
+                    <a  href="?page={{ posts.next_page_number }}" aria-label="Next">Next page
                     <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
@@ -80,10 +83,10 @@
             {% endif %}
         </ul>
       </nav>
+      
 
-    <div id='allPosts'></div>
-    
 {% endblock %}
+
 {% block script %}
-<script src="{% static 'network/network.js' %}" ></script>
+<script src="{% static 'network/profile.js' %}" ></script>
 {% endblock %}

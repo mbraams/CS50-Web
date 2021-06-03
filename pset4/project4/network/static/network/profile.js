@@ -1,29 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    newpost();
     like();
     editPost();
 })
 
-
-function newpost() {
-    document.querySelector("#submitmessage").onclick = function () {
-        let newmessage = document.querySelector("#newmessage");
-        let message = newmessage.value;
-        newmessage.value = "";
-        fetch('/newpost', {
-            method: 'POST',
-            body: JSON.stringify({
-                body: message
-            })
-        })
-            .then(response => response.json())
-            .then(result => {
-                // Print result
-                console.log(result);
-            });
-
-    }
-}
 
 function like() {
     const likeButtons = document.querySelectorAll('.like')
@@ -45,7 +24,7 @@ function like() {
                         currentcount += 1;
                         likecounter.innerHTML = `&#x2764; ${currentcount}`;
                         likecounter.dataset.value = currentcount;
-                        likeButton.innerHTML = "Unlike";
+                        likeButton.innerHTML = "Unlike";                        
                         likeButton.style.color ="red";
                     }
 
@@ -63,7 +42,7 @@ function like() {
                         currentcount -= 1;
                         likecounter.innerHTML = `&#x2764; ${currentcount}`;
                         likecounter.dataset.value = currentcount;
-                        likeButton.innerHTML = "Like";
+                        likeButton.innerHTML = "Like";                        
                         likeButton.style.color ="lightskyblue";
                     }
 
@@ -117,38 +96,13 @@ function editPost() {
 }
 
 
-//used to load posts through JS and json instead of reloading the page which exercise calls for
-function getPosts() {
-    fetch('/allposts')
-        .then(response => response.json())
-        .then(posts => {
-            console.log(posts);
-            const allposts = document.querySelector('#allPosts');
-            allposts.innerHTML = '';
-            posts.forEach((post) => {
+function follow(){
+    const follow = docum.querySelector('#follow');
+    follow.onclick = function() {
+        const profile = follow.dataset.profile;
+        const user = follow.dataset.user;
 
-
-                const container = document.createElement('div');
-                const user = document.createElement('div');
-                const time = document.createElement('div');
-                const body = document.createElement('div');
-                container.className = 'post';
-                user.innerHTML = post.user;
-                user.className = 'user';
-                time.innerHTML = post.timestamp;
-                time.className = 'time';
-                body.innerHTML = post.content;
-                body.className = 'content';
-
-                container.append(user, time, body);
-                console.log(container);
-                allposts.append(container)
-            });
-        })
-        .catch(error => {
-            console.log(`error: ${error}`);
-        })
-
-
+        fetch()
+        //todooooo
+    }
 }
-
