@@ -3,55 +3,57 @@
 
 
 {% block body %}
-    {% if user.is_authenticated %}
-        <div>
-            <form>
-                <div><input type="text" id="newmessage"></div>
-                <div class="submit" id="submitpost"><a href="/"></a><input type="submit" id="submitmessage"></div>                
-            </form>
-        </div>
+    {% if newpost %}
+        {% if user.is_authenticated %}
+            <div>
+                <form>
+                    <div><input type="text" id="newmessage"></div>
+                    <div class="submit" id="submitpost"><a href="/"></a><input type="submit" id="submitmessage"></div>                
+                </form>
+            </div>
+        {% endif %}
     {% endif %}
 
     {% for post in page_obj %}
     <div class="post">
-    <div class='namebar'>
-        <div class="name"><strong><a href="/profile/{{post.user.id}}">{{post.user}}</a></strong></div>
-    </div>
+        <div class='namebar'>
+            <div class="name"><strong><a href="/profile/{{post.user.id}}">{{post.user}}</a></strong></div>
+        </div>
         
     
-    <div class="time">{{post.timestamp}}</div>
+        <div class="time">{{post.timestamp}}</div>
     
    
-    <div class="content">
-        <div class="textcontent" id="content{{post.id}}">{{post.content}}</div>
-    
-        {% if user.username == post.user.username %}
+        <div class="content">
+            <div class="textcontent" id="content{{post.id}}">{{post.content}}</div>
+        
+            {% if user.username == post.user.username %}
 
-        <div><button class='edit' value={{post.id}}>Edit</button></div>
-        <textarea class="editbox" id="edit-box{{post.id}}" style="display:none;"></textarea>
-        <button class="editsubmit" id="edit-submit{{post.id}}" style="display:none;">Edit post</button>
-    
-        {% endif %}
-    </div>
-    <div class="likes" id="likes{{post.id}}" data-value={{post.likecount}}>
-        &#x2764; {{post.likecount}}
-    </div>
-    <div class="likebar">        
-        <button class='like' value={{post.id}}>
-
-            {% if post.id in likedposts %}
-
-            <div style=color:red>Unlike</div>
-
-            {% else %}
-
-            Like
-
+            <div><button class='edit' value={{post.id}}>Edit</button></div>
+            <textarea class="editbox" id="edit-box{{post.id}}" style="display:none;"></textarea>
+            <button class="editsubmit" id="edit-submit{{post.id}}" style="display:none;">Edit post</button>
+        
             {% endif %}
-            
-        </button>
-        <button>Reply</button>
-    </div>
+        </div>
+
+        <div class="likes" id="likes{{post.id}}" data-value={{post.likecount}}>
+            &#x2764; {{post.likecount}}
+        </div>
+
+        <div class="likebar">        
+            <button class='like' value={{post.id}}>
+
+                {% if post.id in likedposts %}
+
+                <div style=color:red>Unlike</div>
+
+                {% else %}
+
+                Like
+
+                {% endif %}                
+            </button>
+        </div>
     </div>
     {% endfor %}
     
@@ -85,5 +87,5 @@
     
 {% endblock %}
 {% block script %}
-<script src="{% static 'network/network.js' %}" ></script>
+    <script src="{% static 'network/network.js' %}" ></script>
 {% endblock %}

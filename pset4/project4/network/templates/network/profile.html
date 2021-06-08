@@ -16,8 +16,8 @@
         {% if user != profile %}
         <div id="followbutton">
             <button id="follow" data-profileid={{profile.id}} data-profile={{profile}} data-user={{user}}>
-                {% if profile in user.follows %}
-                    Unfollow
+                {% if followedNow %}
+                    <div style="color:red">Unfollow</div>
                 {% else %}
                     Follow
                 {% endif %}
@@ -68,7 +68,6 @@
             {% endif %}
             
         </button>
-        <button>Reply</button>
     </div>
     </div>
     {% endfor %}

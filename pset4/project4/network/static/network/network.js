@@ -6,23 +6,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function newpost() {
-    document.querySelector("#submitmessage").onclick = function () {
-        let newmessage = document.querySelector("#newmessage");
-        let message = newmessage.value;
-        newmessage.value = "";
-        fetch('/newpost', {
-            method: 'POST',
-            body: JSON.stringify({
-                body: message
+    //make sure this doesnt  bug out on the following page where no new posts can be made
+    if (document.querySelector("#submitmessage")){
+        document.querySelector("#submitmessage").onclick = function () {
+            let newmessage = document.querySelector("#newmessage");
+            let message = newmessage.value;
+            newmessage.value = "";
+            fetch('/newpost', {
+                method: 'POST',
+                body: JSON.stringify({
+                    body: message
+                })
             })
-        })
-            .then(response => response.json())
-            .then(result => {
-                // Print result
-                console.log(result);
-            });
-
+                .then(response => response.json())
+                .then(result => {
+                    // Print result
+                    console.log(result);
+                });
+    
+        }
     }
+    
 }
 
 function like() {

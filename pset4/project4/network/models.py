@@ -2,16 +2,17 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django import forms
 from django.db.models.deletion import CASCADE
-from django.db.models.fields.related import ManyToManyField
+from django.db.models.fields.related import ForeignKey, ManyToManyField
 
+defaultuser = 1
 
 class User(AbstractUser):
-    following = ManyToManyField('self', blank=True, related_name='follows')
-    followedby = ManyToManyField('self', blank=True, related_name='followed_by')
     def __str__(self):
         return self.username
 
-    
+class Follow(models.Model):
+    followedUser = ForeignKey(User, on_delete=CASCADE, related_name="followingUser", default=defaultuser)
+    followingUser = ForeignKey(User, on_delete=CASCADE, related_name="followedUser", default=defaultuser)    
 
 class Reaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

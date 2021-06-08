@@ -121,6 +121,8 @@ button{
 
 .likes{
     border-top: 1px solid grey;
+    margin-top: 1px;
+    margin-bottom: 1px;
 }
 
 .editbox{

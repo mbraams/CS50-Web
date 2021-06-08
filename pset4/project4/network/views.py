@@ -6,28 +6,32 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from django.views.decorators import csrf
-from .models import Like, User, Post
+from .models import Like, User, Post, Follow
 import json
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 
 from django.views.decorators.csrf import csrf_exempt
 
+#set number for pagination across the site
+paginationamount = 5
 
 class NewPost(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['content']
 
+@login_required
 def index(request):
     newpost = NewPost()
+    
     userLikes = Like.objects.filter(user=request.user)
     likedposts = []
     for like in userLikes:
         likedposts.append(like.post.id)
     posts = Post.objects.all().order_by('-timestamp')
     #paginate amount of posts per page
-    p = Paginator(posts, 5)
+    p = Paginator(posts, paginationamount)
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
 
@@ -59,7 +63,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("login"))
 
 
 def register(request):
@@ -101,6 +105,7 @@ def newposts(request):
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
+@login_required
 def allposts(request):
     posts = Post.objects.all().order_by('-timestamp')
     
@@ -146,18 +151,25 @@ def edit(request, post_id):
     else:
         return JsonResponse({"error":"error, method has to be 'PUT'"})
 
+@login_required
 def viewprofile(request, user_id):
     profile = User.objects.get(id=user_id)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
-    followers = profile.followedby.count()
-    follows = profile.following.count()
 
+    #counts followers and accounts the profile follows
+    followers = Follow.objects.filter(followedUser=profile).count()
+    follows = Follow.objects.filter(followingUser=profile).count()
+
+    #checks if user is following the profile already
+    followedNow = Follow.objects.filter(followingUser=request.user, followedUser=profile)
+
+    #getlikes
     userLikes = Like.objects.filter(user=request.user)
     likedposts = []
     for like in userLikes:
         likedposts.append(like.post.id)
     #paginate amount of posts per page
-    p = Paginator(posts, 5)
+    p = Paginator(posts, paginationamount)
     page_number = request.GET.get('page')
     page_obj = p.get_page(page_number)
 
@@ -166,7 +178,8 @@ def viewprofile(request, user_id):
         "posts" : page_obj,
         "followers" : followers,
         "follows": follows,
-        "likedposts" : likedposts
+        "likedposts" : likedposts,
+        "followedNow" : followedNow
        }
 
     return render(request, "network/profile.html", context)
@@ -174,7 +187,7 @@ def viewprofile(request, user_id):
 @csrf_exempt
 def getfollow(request, profile_id):
     profile = User.objects.get(id=profile_id)
-    followed = User.objects.filter(id=request.user.id, following=profile)
+    followed = Follow.objects.filter(followingUser=request.user.id, followedUser=profile)
 
     found = {'followed' : False}
     #checking if user is already following or not
@@ -185,33 +198,45 @@ def getfollow(request, profile_id):
     #user following/unfollowing profile
     else:
         user = request.user
-        profile = User.objects.get(id=profile_id)
         if request.method == "POST":            
             data = json.loads(request.body)
             #json sends true if trying to follow, false if unfollowing
             follows = data.get("follows")
             print(follows)
             #user added a follow
-            if follows:        
-                
-                print("profile owner: ", profile, "is first followed by: ", profile.followedby.all())
-                print("User:", user, " is first followed by: ", user.followedby.all())       
-                user.following.add(profile)
-                profile.followedby.add(user)
+            if follows:             
+                newFollow = Follow(followingUser=user, followedUser=profile)
                 message = "followed"
-                print("Profile owner: ", profile, "is now followed by: ", profile.followedby.all())
-                print("User:", user, "is now followed by: ", user.followedby.all())
+                newFollow.save()
+                print(newFollow.all())
             #user unfollowed
             else:
-                user.following.remove(profile)
-                profile.followedby.remove(user)
+                removeFollow = Follow.objects.get(followingUser=user, followedUser=profile)
+                removeFollow.delete()
                 message = "unfollowed"
                 
-                print(profile.followedby.all())
-            profile.save()
-            user.save()
             return JsonResponse({"message": message}, status=201)
 
+@login_required
+def followedposts(request):
+    #get likes
+    userLikes = Like.objects.filter(user=request.user)
+    likedposts = []
+    for like in userLikes:
+        likedposts.append(like.post.id)
+
+    #get followed posts
+    followedAccounts = Follow.objects.filter(followingUser=request.user).values("followedUser")
+    posts = Post.objects.filter(user__in=followedAccounts).order_by('-timestamp')
+    
+    #paginate amount of posts per page
+    p = Paginator(posts, paginationamount)
+    page_number = request.GET.get('page')
+    page_obj = p.get_page(page_number)
+
+    return render(request, "network/index.html", {
+        "page_obj" : page_obj, "likedposts" : likedposts
+    })
 
 
 
