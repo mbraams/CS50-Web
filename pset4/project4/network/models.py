@@ -6,10 +6,12 @@ from django.db.models.fields.related import ManyToManyField
 
 
 class User(AbstractUser):
-    followers = ManyToManyField('self', blank=True)
-    follows = ManyToManyField('self', blank=True)
+    following = ManyToManyField('self', blank=True, related_name='follows')
+    followedby = ManyToManyField('self', blank=True, related_name='followed_by')
     def __str__(self):
         return self.username
+
+    
 
 class Reaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

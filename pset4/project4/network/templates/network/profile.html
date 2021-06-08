@@ -2,18 +2,33 @@
 {% load static %}
 
 {% block body %}
+<div id="profile-bar">
+    <div id="username">
+        <strong>{{profile}}</strong>
+    </div>
+    <div id="followbar">
+        
+    
+        <div id="followers">
+            <div id="followcount" data-follows={{follows}}>Follows : {{follows}}</div>
+            <div id="followercount" data-followers={{followers}}>Followers: {{followers}}</div>
+        </div>
+        {% if user != profile %}
+        <div id="followbutton">
+            <button id="follow" data-profileid={{profile.id}} data-profile={{profile}} data-user={{user}}>
+                {% if profile in user.follows %}
+                    Unfollow
+                {% else %}
+                    Follow
+                {% endif %}
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
 
-{{profile}}
-follows : {{follows}}
-followers: {{followers}}
 
-{% if user.is_authenticated %}
-    {% if user != profile %}
-        <button id="follow" data-profile="profile" data-user="user">
-            follow
-        </button>
-    {% endif %}
-{% endif %}
+
 
 {% for post in posts %}
     <div class="post">

@@ -21,6 +21,8 @@ form{
     border-radius: 5px;
 }
 
+
+
 #newmessage{
     width: 80%;
     margin-left: 10%;
@@ -136,5 +138,43 @@ button{
 
 }
 
+#profile-bar{
+    width: 30%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 35%;
+    margin-right: 35%;
+    background-color: #7CB9E8;
+    border: 2px rgb(3, 5, 7);
+    border-style: solid;
+    border-radius: 5px;
+}
 
+#username{
+    color:rgba(240, 255, 240, 0.801);
+    font-weight: bolder;
+    text-align: center;
+}
 
+#followers{
+    display: inline-block;
+    text-align: left;
+    width: 40%;
+    margin-left: 10%;
+}
+
+#followbutton{
+    width: 220px;
+    display: inline-block;
+    text-align: right;
+    align-self: right;
+    margin-left: 0%;
+}
+
+#followcount{
+    display: inline-block;
+}
+
+#followercount{
+    display: inline-block;
+}

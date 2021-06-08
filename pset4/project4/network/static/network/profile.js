@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     like();
     editPost();
+    follow();
 })
 
 
@@ -24,8 +25,8 @@ function like() {
                         currentcount += 1;
                         likecounter.innerHTML = `&#x2764; ${currentcount}`;
                         likecounter.dataset.value = currentcount;
-                        likeButton.innerHTML = "Unlike";                        
-                        likeButton.style.color ="red";
+                        likeButton.innerHTML = "Unlike";
+                        likeButton.style.color = "red";
                     }
 
 
@@ -42,8 +43,8 @@ function like() {
                         currentcount -= 1;
                         likecounter.innerHTML = `&#x2764; ${currentcount}`;
                         likecounter.dataset.value = currentcount;
-                        likeButton.innerHTML = "Like";                        
-                        likeButton.style.color ="lightskyblue";
+                        likeButton.innerHTML = "Like";
+                        likeButton.style.color = "lightskyblue";
                     }
 
                 })
@@ -81,13 +82,13 @@ function editPost() {
                         console.log(result);
                     });
 
-                    //show regular blocks\
-                    postContent.style.display = 'block';
-                    edit.style.display = 'block';                    
-                    edittextbox.style.display = 'none';
-                    submitbutton.style.display = 'none';
+                //show regular blocks\
+                postContent.style.display = 'block';
+                edit.style.display = 'block';
+                edittextbox.style.display = 'none';
+                submitbutton.style.display = 'none';
 
-                    postContent.innerHTML = edittextbox.value;
+                postContent.innerHTML = edittextbox.value;
 
             }
 
@@ -96,13 +97,51 @@ function editPost() {
 }
 
 
-function follow(){
-    const follow = docum.querySelector('#follow');
-    follow.onclick = function() {
-        const profile = follow.dataset.profile;
-        const user = follow.dataset.user;
+function follow() {
+    const followbttn = document.querySelector('#follow');
+    followbttn.onclick = function () {
+        const profile_id = followbttn.dataset.profileid;
+        console.log(profile_id);
 
-        fetch()
-        //todooooo
+        fetch(`getfollow/${profile_id}`)
+            .then(response => response.json())
+            .then(follows => {
+                //if the user doesnt follow yet, follow
+                if (follows["followed"] === false) {
+                    fetch(`getfollow/${profile_id}`, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            follows: true
+                        })
+                    })
+                    //update count
+                    followercount = document.querySelector("#followercount");
+                    newcount = parseInt(followercount.dataset.followers) + 1;
+                    followercount.innerHTML = `Followers: ${newcount}`;
+                    followercount.dataset.followers = newcount;
+                    console.log("user followed");
+                    followbttn.style.color = 'red';
+                    followbttn.innerHTML = 'Unfollow'
+                }
+                //else unfollow
+                else {
+                    fetch(`getfollow/${profile_id}`, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            follows: false
+                        })                        
+                    })
+                    //update count
+                    followercount = document.querySelector("#followercount");
+                    newcount = parseInt(followercount.dataset.followers) - 1;
+                    followercount.innerHTML = `Followers: ${newcount}`;                    
+                    followercount.dataset.followers = newcount;
+                    followbttn.style.color = 'lightskyblue';
+                    followbttn.innerHTML = 'Follow';
+
+                    console.log("user unfollowed");
+                }
+            })
     }
+    return false
 }

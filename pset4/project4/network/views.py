@@ -149,8 +149,8 @@ def edit(request, post_id):
 def viewprofile(request, user_id):
     profile = User.objects.get(id=user_id)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
-    followers = profile.followers.count()
-    follows = profile.follows.count()
+    followers = profile.followedby.count()
+    follows = profile.following.count()
 
     userLikes = Like.objects.filter(user=request.user)
     likedposts = []
@@ -171,33 +171,45 @@ def viewprofile(request, user_id):
 
     return render(request, "network/profile.html", context)
 
+@csrf_exempt
 def getfollow(request, profile_id):
-    follows = User.objects.filter(id=request.user, follows=profile_id)
-    found = {'liked' : False}
+    profile = User.objects.get(id=profile_id)
+    followed = User.objects.filter(id=request.user.id, following=profile)
+
+    found = {'followed' : False}
     #checking if user is already following or not
     if request.method == "GET":
-        if follows:
-            found['liked'] = True
+        if followed:
+            found['followed'] = True
         return JsonResponse(found)
     #user following/unfollowing profile
-
-    #change this still
     else:
-        if request.method == "POST":    
-            post = Post.objects.get(id=post_id)        
+        user = request.user
+        profile = User.objects.get(id=profile_id)
+        if request.method == "POST":            
             data = json.loads(request.body)
-            liked = data.get("like")
-            print(liked)
-            if liked:                
-                newlike = Like(user=request.user, post=post)
-                newlike.save()
-                message = "post liked"
+            #json sends true if trying to follow, false if unfollowing
+            follows = data.get("follows")
+            print(follows)
+            #user added a follow
+            if follows:        
+                
+                print("profile owner: ", profile, "is first followed by: ", profile.followedby.all())
+                print("User:", user, " is first followed by: ", user.followedby.all())       
+                user.following.add(profile)
+                profile.followedby.add(user)
+                message = "followed"
+                print("Profile owner: ", profile, "is now followed by: ", profile.followedby.all())
+                print("User:", user, "is now followed by: ", user.followedby.all())
+            #user unfollowed
             else:
-                likesOnPost.delete()            
-                message = "like deleted"
-            post.likecount = Like.objects.filter(post=post_id).count()
-            print(post.likecount)
-            post.save()
+                user.following.remove(profile)
+                profile.followedby.remove(user)
+                message = "unfollowed"
+                
+                print(profile.followedby.all())
+            profile.save()
+            user.save()
             return JsonResponse({"message": message}, status=201)
 
 
